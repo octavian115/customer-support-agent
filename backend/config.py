@@ -33,4 +33,4 @@ PINECONE_NAMESPACE = "taskflow-kb"
 # -------------------
 # Agent settings
 # -------------------
-CONFIDENCE_THRESHOLD = 0.65  # below this, escalate instead of responding
+CONFIDENCE_THRESHOLD = 0.60  # below this, escalate instead of responding
