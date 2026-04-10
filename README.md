@@ -6,24 +6,21 @@ Built with **LangGraph** for agent orchestration, featuring intent classificatio
 
 ## Architecture
 
-```
-Customer Message
-       ↓
-  ┌─────────────┐
-  │  Classifier  │  ← Classifies intent: faq / technical / billing / escalation
-  └──────┬──────┘
-         ↓ (conditional routing)
-   ┌─────┼──────────────┐
-   ↓     ↓              ↓
-┌─────┐ ┌─────┐   ┌───────────┐
-│ RAG │ │ RAG │   │ Escalation│  ← Summarizes & hands off to human
-└──┬──┘ └──┬──┘   └───────────┘
-   ↓       ↓
-   │  (confidence check)
-   ↓       ↓
-┌──────┐ ┌────────┐
-│Response│ │Billing │  ← HITL: interrupt() for human approval
-└──────┘ └────────┘
+```mermaid
+flowchart TD
+    A[Customer Message] --> B[Classifier]
+    B -->|faq / technical| C[RAG Node]
+    B -->|billing| D[RAG Node]
+    B -->|escalation| E[Escalation Node]
+
+    C -->|confidence ≥ 0.65| F[Response Node]
+    C -->|confidence < 0.65| E
+
+    D --> G[Billing Node\nHITL: interrupt]
+
+    F --> H[END]
+    G --> H
+    E --> H
 ```
 
 ## Key Features
