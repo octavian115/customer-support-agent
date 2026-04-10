@@ -13,6 +13,16 @@ from backend.state import SupportState
 from backend.config import llm
 from backend.prompts import CLASSIFIER_PROMPT
 
+from pydantic import BaseModel, Field
+from typing import Literal
+
+class IntentClassification(BaseModel):
+    intent: Literal["faq", "technical", "billing", "escalation"] = Field(
+        description="The classified intent of the customer message"
+    )
+
+classifier_llm = llm.with_structured_output(IntentClassification)
+
 
 def classifier_node(state: SupportState) -> dict:
     """Classify the customer's intent based on conversation history."""
@@ -20,16 +30,17 @@ def classifier_node(state: SupportState) -> dict:
     # Get the latest customer message
     latest_message = state["messages"][-1].content
 
-    response = llm.invoke([
+    response = classifier_llm.invoke([
         SystemMessage(content=CLASSIFIER_PROMPT),
         HumanMessage(content=latest_message),
     ])
 
-    intent = response.content.strip().lower()
+    
 
-    # Validate — if the LLM returns something unexpected, default to escalation
-    valid_intents = {"faq", "technical", "billing", "escalation"}
-    if intent not in valid_intents:
-        intent = "escalation"
+    # # Validate — if the LLM returns something unexpected, default to escalation
+    # valid_intents = {"faq", "technical", "billing", "escalation"}
+    # if intent not in valid_intents:
+    #     # fallback option
+    #     intent = "escalation"
 
-    return {"intent": intent}
+    return {"intent": response.intent}
