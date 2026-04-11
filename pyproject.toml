@@ -12,6 +12,7 @@ dependencies = [
     "openai>=2.31.0",
     "pinecone>=8.1.2",
     "python-dotenv>=1.2.2",
+    "requests>=2.33.1",
     "streamlit>=1.56.0",
     "uvicorn>=0.44.0",
 ]
