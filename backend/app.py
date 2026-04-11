@@ -11,6 +11,7 @@ Endpoints:
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from typing import Literal
 from datetime import datetime
 from langchain_core.messages import HumanMessage
 from langgraph.types import Command
@@ -33,8 +34,13 @@ class ChatResponse(BaseModel):
 
 class ReviewRequest(BaseModel):
     thread_id: str
-    approved: str  # "yes" or "no"
+    approved: Literal["yes", "no"]  # "yes" or "no"
     edited_response: str | None = None
+
+
+@app.get("/")
+def health_check():
+    return {"status": "ok", "service": "TaskFlow Support Agent"}
 
 @app.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest):
