@@ -53,9 +53,31 @@ else:
 # Show all threads
 st.divider()
 st.subheader("All Threads")
+
 threads_response = requests.get(f"{API_URL}/threads")
 threads = threads_response.json()["threads"]
 
+if "selected_thread" not in st.session_state:
+    st.session_state.selected_thread = None
+
 for thread in threads:
     status_emoji = {"active": "🟢", "pending_review": "🟡"}.get(thread["status"], "⚪")
-    st.write(f"{status_emoji} **{thread['thread_id']}** — {thread['status']}")
+    if st.button(
+        f"{status_emoji} {thread['thread_id']} — {thread['status']}",
+        key=f"thread_{thread['thread_id']}",
+    ):
+        st.session_state.selected_thread = thread["thread_id"]
+
+# Show conversation history for selected thread
+if st.session_state.selected_thread:
+    st.divider()
+    st.subheader(f"Conversation: {st.session_state.selected_thread}")
+
+    msg_response = requests.get(
+        f"{API_URL}/thread/{st.session_state.selected_thread}/messages"
+    )
+    messages = msg_response.json()["messages"]
+
+    for msg in messages:
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
