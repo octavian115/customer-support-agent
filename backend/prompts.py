@@ -38,13 +38,23 @@ Based on the conversation and the retrieved billing documentation, determine wha
 Retrieved documentation:
 {retrieved_docs}
 
-Analyze the request and produce a structured summary of the proposed action:
-- What action is being requested (refund, plan change, cancellation, etc.)
-- The relevant policy details from the docs
-- Whether the request is eligible based on the policy
-- A draft response to the customer
+Respond with exactly two sections separated by ---
 
-Be precise about amounts, timeframes, and policy conditions.
+SECTION 1 - ANALYSIS (for the internal reviewer):
+- What action is being requested
+- The relevant policy details
+- Whether the request is eligible based on the policy
+
+---
+
+SECTION 2 - CUSTOMER RESPONSE (to be sent directly to the customer):
+Write a short, friendly message to the customer. This will be sent as-is, so:
+- Do NOT include placeholders like [Your Name] or [Customer Name]
+- Do NOT use letter formatting (no "Dear", no "Best regards", no sign-off)
+- Do NOT use markdown headers or bold text
+- Keep it conversational — 3-4 sentences max
+- Include specific policy details (amounts, timeframes) where relevant
+- Sign off simply as "TaskFlow Support"
 """
 
 ESCALATION_PROMPT = """You are a support agent for TaskFlow. This conversation needs to be escalated to a human agent.

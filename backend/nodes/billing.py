@@ -37,8 +37,24 @@ def billing_node(state: SupportState) -> dict:
 
     # Resume: human has made a decision
     if isinstance(decision, dict) and decision.get("approved") == "yes":
-        # Human approved — use the proposed response (or edited version)
-        final_response = decision.get("edited_response", analysis.content)
+    # Use edited response if provided, otherwise extract Section 2
+        if decision.get("edited_response"):
+            final_response = decision["edited_response"]
+        else:
+            # Split on --- and take Section 2 (customer response)
+            parts = analysis.content.split("---")
+            if len(parts) >= 2:
+                # Extract just the customer-facing part
+                customer_section = parts[-1].strip()
+                # Remove the "SECTION 2 - CUSTOMER RESPONSE..." header if present
+                lines = customer_section.split("\n")
+                final_response = "\n".join(
+                    line for line in lines 
+                    if not line.strip().startswith("SECTION 2")
+                ).strip()
+            else:
+                final_response = analysis.content
+
         return {"messages": [AIMessage(content=final_response)]}
 
     else:

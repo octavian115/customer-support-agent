@@ -8,6 +8,13 @@ API_URL = "http://localhost:8000"
 st.title("TaskFlow Support")
 st.caption("Hi! How can I help you today?")
 
+# Add this after the st.title and st.caption lines
+if st.sidebar.button("New Conversation"):
+    st.session_state.thread_id = str(uuid.uuid4())
+    st.session_state.messages = []
+    st.session_state.pending = False
+    st.rerun()
+
 # Generate a unique thread ID per session
 if "thread_id" not in st.session_state:
     st.session_state.thread_id = str(uuid.uuid4())
