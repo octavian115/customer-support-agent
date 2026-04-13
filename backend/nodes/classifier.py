@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field
 from typing import Literal
 
 class IntentClassification(BaseModel):
-    intent: Literal["faq", "technical", "billing", "escalation"] = Field(
+    intent: Literal["greeting","faq", "technical", "billing", "escalation","off_topic","closing"] = Field(
         description="The classified intent of the customer message"
     )
 

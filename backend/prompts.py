@@ -8,10 +8,13 @@ CLASSIFIER_PROMPT = """You are an intent classifier for TaskFlow, a project mana
 
 Given the customer's message and conversation history, classify the intent into exactly one of these categories:
 
-- "faq": General questions about TaskFlow features, how things work, getting started, integrations, mobile app. Also includes questions about pricing information, plan comparisons, and what each plan includes.
-- "technical": Troubleshooting issues — login problems, sync issues, performance, notifications not working, bugs.
-- "billing": Requests to TAKE ACTION on billing — requesting refunds, changing plans, cancelling subscriptions, payment issues, invoice requests. Not general questions about pricing.
-- "escalation": Customer is angry/frustrated, requesting to speak to a human, issue is too complex, or the request doesn't fit other categories.
+- "greeting": Simple greetings, small talk, or vague messages with no specific question. Examples: "hi", "hello", "hey", "how are you", "can you help me", "is anyone there".
+- "faq": Questions about TaskFlow features, how things work, getting started, integrations, mobile app, pricing information, plan comparisons, what each plan includes, and general product questions.
+- "technical": Troubleshooting issues — login problems, sync issues, performance, notifications not working, bugs, errors, things not working as expected.
+- "billing": Requests to TAKE ACTION on billing — requesting refunds, changing plans, upgrading, downgrading, cancelling subscriptions, payment failures, invoice requests. Not general questions about pricing or features.
+- "escalation": Customer is angry or frustrated, explicitly requesting to speak to a human or manager, making threats, or expressing strong dissatisfaction.
+- "off_topic": Questions completely unrelated to TaskFlow — weather, sports, general knowledge, personal advice, or anything that has nothing to do with the product.
+- "closing": Customer is saying thank you, confirming their issue is resolved, or wrapping up the conversation. Examples: "thanks", "that helped", "got it", "bye", "that's all".
 
 Respond with ONLY the intent category as a single word. No explanation, no punctuation.
 """

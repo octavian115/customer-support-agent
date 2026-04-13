@@ -27,23 +27,31 @@ from backend.nodes.rag import rag_node
 from backend.nodes.response import response_node
 from backend.nodes.billing import billing_node
 from backend.nodes.escalation import escalation_node
+from backend.nodes.greeting import greeting_node
+from backend.nodes.off_topic import off_topic_node
+from backend.nodes.closing import closing_node
 
 
 # -------------------
 # Conditional edge functions
 # -------------------
 def route_by_intent(state: SupportState) -> str:
-    """Route to the appropriate node based on classified intent."""
     intent = state["intent"]
 
-    if intent in ("faq", "technical"):
+    if intent == "greeting":
+        return "greeting_node"
+    elif intent in ("faq", "technical"):
         return "rag_node"
     elif intent == "billing":
-        return "rag_node"  # billing also needs RAG to fetch policies first
+        return "rag_node"
     elif intent == "escalation":
         return "escalation_node"
+    elif intent == "off_topic":
+        return "off_topic_node"
+    elif intent == "closing":
+        return "closing_node"
     else:
-        return "escalation_node"  # fallback
+        return "escalation_node"
 
 
 def route_after_rag(state: SupportState) -> str:
@@ -77,6 +85,9 @@ def build_graph():
     graph.add_node("response_node", response_node)
     graph.add_node("billing_node", billing_node)
     graph.add_node("escalation_node", escalation_node)
+    graph.add_node("greeting_node", greeting_node)
+    graph.add_node("off_topic_node", off_topic_node)
+    graph.add_node("closing_node", closing_node)
 
     # Entry point
     graph.add_edge(START, "classifier_node")
@@ -86,10 +97,13 @@ def build_graph():
         "classifier_node",
         route_by_intent,
         {
+            "greeting_node": "greeting_node",
             "rag_node": "rag_node",
             "escalation_node": "escalation_node",
+            "off_topic_node": "off_topic_node",
+            "closing_node": "closing_node",
         },
-    )
+)
 
     # Conditional routing after RAG retrieval
     graph.add_conditional_edges(
@@ -106,6 +120,9 @@ def build_graph():
     graph.add_edge("response_node", END)
     graph.add_edge("billing_node", END)
     graph.add_edge("escalation_node", END)
+    graph.add_edge("greeting_node", END)
+    graph.add_edge("off_topic_node", END)
+    graph.add_edge("closing_node", END)
 
     # Compile with checkpointer (MemorySaver for dev, Postgres for prod)
     # checkpointer is what makes HITL possible - graph can pause and resume
