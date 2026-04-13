@@ -17,7 +17,18 @@ from langchain_core.messages import HumanMessage
 from langgraph.types import Command
 from backend.graph import support_agent
 
-app = FastAPI(title="TaskFlow Support Agent API")
+from fastapi.middleware.cors import CORSMiddleware
+
+
+app = FastAPI(title="Customer Support Agent API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # In-memory thread tracking
 threads = {}

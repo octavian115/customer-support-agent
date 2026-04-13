@@ -1,7 +1,9 @@
 import streamlit as st
 import requests
+import os
 
-API_URL = "http://localhost:8000"
+API_URL = os.getenv("API_URL", "http://localhost:8000")
+# so that it defaults to localhost for dev but uses the Render URL in production
 
 st.title("Agent Dashboard")
 st.caption("Review pending customer requests")

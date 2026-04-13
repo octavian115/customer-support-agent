@@ -2,10 +2,12 @@ import streamlit as st
 import requests
 import time
 import random
+import os
 
-API_URL = "http://localhost:8000"
+# so that it defaults to localhost for dev but uses the Render URL in production
+API_URL = os.getenv("API_URL", "http://localhost:8000")
 
-st.title("TaskFlow Support")
+st.title("Customer Support")
 st.caption("Hi! How can I help you today?")
 
 if st.sidebar.button("New Conversation"):
