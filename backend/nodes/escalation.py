@@ -17,8 +17,17 @@ from backend.prompts import ESCALATION_PROMPT
 def escalation_node(state: SupportState) -> dict:
     """Generate a summary for the human agent and notify the customer."""
 
+    # Build context including retrieved docs if available
+    # this handles the escalation if it happens after RAG(low confidence path)
+    # otherwise it will hallucinate
+    context = ""
+    if state.get("retrieved_docs"):
+        context = "\n\nRelevant documentation found:\n" + "\n---\n".join(state["retrieved_docs"])
+
+    prompt = ESCALATION_PROMPT + context
+
     # Generate a summary for the human agent
-    messages = [SystemMessage(content=ESCALATION_PROMPT)] + state["messages"]
+    messages = [SystemMessage(content=prompt)] + state["messages"]
     summary = llm.invoke(messages)
 
     # Determine the reason for escalation
