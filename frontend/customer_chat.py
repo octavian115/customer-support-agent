@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-import uuid
 import time
 import random
 
@@ -9,14 +8,12 @@ API_URL = "http://localhost:8000"
 st.title("TaskFlow Support")
 st.caption("Hi! How can I help you today?")
 
-# Add this after the st.title and st.caption lines
 if st.sidebar.button("New Conversation"):
     st.session_state.thread_id = f"chat-{random.randint(1000, 9999)}"
     st.session_state.messages = []
     st.session_state.pending = False
     st.rerun()
 
-# Generate a unique thread ID per session
 if "thread_id" not in st.session_state:
     st.session_state.thread_id = f"chat-{random.randint(1000, 9999)}"
 
@@ -33,8 +30,7 @@ for msg in st.session_state.messages:
 
 # If waiting for review, poll for updates
 if st.session_state.pending:
-    with st.chat_message("ai"):
-        st.info("⏳ Let me check with my team on this. I'll get back to you shortly.")
+    st.info("⏳ Let me check with my team on this. I'll get back to you shortly.")
 
     response = requests.get(
         f"{API_URL}/thread/{st.session_state.thread_id}/messages"
@@ -56,19 +52,15 @@ if prompt := st.chat_input("Type your message..."):
     with st.chat_message("human"):
         st.markdown(prompt)
 
-    # Show loading while agent thinks
-    with st.chat_message("ai"):
-        with st.spinner("Thinking..."):
-            response = requests.post(f"{API_URL}/chat", json={
-                "thread_id": st.session_state.thread_id,
-                "message": prompt,
-            })
-            data = response.json()
+    # Call API with a status message (not inside chat_message)
+    with st.spinner("Thinking..."):
+        response = requests.post(f"{API_URL}/chat", json={
+            "thread_id": st.session_state.thread_id,
+            "message": prompt,
+        })
+        data = response.json()
 
     if data["status"] == "pending_review":
-        # Show waiting message but don't add to messages list
-        with st.chat_message("ai"):
-            st.info("⏳ Let me check with my team on this. I'll get back to you shortly.")
         st.session_state.pending = True
         st.rerun()
     else:
