@@ -39,4 +39,5 @@ def escalation_node(state: SupportState) -> dict:
     return {
         "messages": [customer_message],
         "escalation_reason": reason,
+        "escalation_summary": summary.content,
     }

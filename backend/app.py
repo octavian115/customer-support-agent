@@ -162,3 +162,19 @@ def get_thread_messages(thread_id: str):
         })
 
     return {"thread_id": thread_id, "messages": messages}
+
+
+@app.get("/thread/{thread_id}/state")
+def get_thread_state(thread_id: str):
+    if thread_id not in threads:
+        raise HTTPException(status_code=404, detail="Thread not found")
+
+    config = {"configurable": {"thread_id": thread_id}}
+    snapshot = support_agent.get_state(config)
+
+    return {
+        "intent": snapshot.values.get("intent"),
+        "confidence": snapshot.values.get("confidence"),
+        "escalation_reason": snapshot.values.get("escalation_reason"),
+        "escalation_summary": snapshot.values.get("escalation_summary"),
+    }

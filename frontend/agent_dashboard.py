@@ -73,6 +73,22 @@ if st.session_state.selected_thread:
     st.divider()
     st.subheader(f"Conversation: {st.session_state.selected_thread}")
 
+    # Check for escalation summary
+    try:
+        state_response = requests.get(
+            f"{API_URL}/thread/{st.session_state.selected_thread}/state"
+        )
+        if state_response.ok:
+            state_data = state_response.json()
+            if state_data.get("escalation_summary"):
+                st.error("🚨 Escalated Thread")
+                st.info(f"**Agent Summary:** {state_data['escalation_summary']}")
+            if state_data.get("escalation_reason"):
+                st.caption(f"Reason: {state_data['escalation_reason']}")
+    except Exception:
+        pass
+
+    # Show messages
     msg_response = requests.get(
         f"{API_URL}/thread/{st.session_state.selected_thread}/messages"
     )

@@ -22,6 +22,7 @@ class SupportState(TypedDict):
         confidence: Confidence score from RAG retrieval (0.0 to 1.0).
                     Used to decide whether to respond or escalate.
         escalation_reason: Why the conversation was escalated to a human agent.
+        escalation_summary: LLM-generates an escalation summary for the human agent.
     """
 
     messages: Annotated[list[BaseMessage], add_messages]
@@ -29,3 +30,4 @@ class SupportState(TypedDict):
     retrieved_docs: list[str]
     confidence: float
     escalation_reason: str
+    escalation_summary: str 
