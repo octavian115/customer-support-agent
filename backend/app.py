@@ -7,6 +7,7 @@ Endpoints:
     POST /review            — Human approves/rejects a pending action
     GET  /threads           — List all conversation threads
     GET  /thread/{id}/messages — Get full conversation history for a thread
+    GET  /thread/{id}/state  - to get the present state
 """
 
 from fastapi import FastAPI, HTTPException
@@ -22,6 +23,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Customer Support Agent API")
 
+# Streamlit running on one Render URL calling FastAPI on another URL needs CORS enabled.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
