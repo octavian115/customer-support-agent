@@ -8,9 +8,9 @@ CLASSIFIER_PROMPT = """You are an intent classifier for TaskFlow, a project mana
 
 Given the customer's message and conversation history, classify the intent into exactly one of these categories:
 
-- "faq": General questions about TaskFlow features, how things work, getting started, integrations, mobile app.
+- "faq": General questions about TaskFlow features, how things work, getting started, integrations, mobile app, pricing information, plan comparisons.
 - "technical": Troubleshooting issues — login problems, sync issues, performance, notifications not working, bugs.
-- "billing": Anything related to pricing, plans, payments, refunds, upgrades, downgrades, cancellations, invoices.
+- "billing": Requests to take action on billing — refunds, plan changes, cancellations, payment issues, invoice requests. Not general pricing questions.
 - "escalation": Customer is angry/frustrated, requesting to speak to a human, issue is too complex, or the request doesn't fit other categories.
 
 Respond with ONLY the intent category as a single word. No explanation, no punctuation.

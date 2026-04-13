@@ -51,7 +51,7 @@ class ReviewRequest(BaseModel):
 
 @app.get("/")
 def health_check():
-    return {"status": "ok", "service": "TaskFlow Support Agent"}
+    return {"status": "ok", "service": "Customer Support Agent"}
 
 @app.post("/chat", response_model=ChatResponse)
 def chat(request: ChatRequest):
