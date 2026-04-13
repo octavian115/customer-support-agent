@@ -34,13 +34,5 @@ def classifier_node(state: SupportState) -> dict:
         SystemMessage(content=CLASSIFIER_PROMPT),
         HumanMessage(content=latest_message),
     ])
-
     
-
-    # # Validate — if the LLM returns something unexpected, default to escalation
-    # valid_intents = {"faq", "technical", "billing", "escalation"}
-    # if intent not in valid_intents:
-    #     # fallback option
-    #     intent = "escalation"
-
     return {"intent": response.intent}

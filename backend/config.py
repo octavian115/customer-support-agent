@@ -3,6 +3,8 @@ Shared configuration for the TaskFlow support agent.
 
 Initializes LLM, embedding model, and Pinecone index.
 All nodes import from here — single source of truth for clients.
+
+Config holds things that multiple files need.
 """
 
 import os
@@ -16,6 +18,7 @@ load_dotenv()
 # LLM
 # -------------------
 llm = ChatOpenAI(model="gpt-4o", temperature=0)
+# temperature 0 because customer support needs to be consistent,deterministic responses
 
 # -------------------
 # Embeddings

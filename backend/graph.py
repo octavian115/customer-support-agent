@@ -12,6 +12,8 @@ Graph topology:
         ├── "billing"    → rag → billing (HITL interrupt) → END
         └── "escalation" → escalation → END
 """
+# this is modularity in action
+# no definition here just a blueprint
 
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import MemorySaver
@@ -50,6 +52,7 @@ def route_after_rag(state: SupportState) -> str:
     confidence = state.get("confidence", 0.0)
 
     # Billing always goes to billing node (needs HITL regardless of confidence)
+    # no matter how confident we are in the retrieval
     if intent == "billing":
         return "billing_node"
 
@@ -105,6 +108,7 @@ def build_graph():
     graph.add_edge("escalation_node", END)
 
     # Compile with checkpointer (MemorySaver for dev, Postgres for prod)
+    # checkpointer is what makes HITL possible - graph can pause and resume
     checkpointer = MemorySaver()
     return graph.compile(checkpointer=checkpointer)
 
