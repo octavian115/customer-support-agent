@@ -12,24 +12,27 @@ flowchart TD
     B -->|faq / technical| C[RAG Node]
     B -->|billing| D[RAG Node]
     B -->|escalation| E[Escalation Node]
+    B -->|greeting / off-topic / closing| F[Simple Response Nodes]
 
-    C -->|confidence ≥ 0.60| F[Response Node]
+    C -->|confidence ≥ 0.60| G[Response Node]
     C -->|confidence < 0.60| E
 
-    D --> G[Billing Node\nHITL: interrupt]
+    D --> H[Billing Node\nHITL: interrupt]
 
-    F --> H[END]
-    G --> H
-    E --> H
+    G --> I[END]
+    H --> I
+    E --> I
+    F --> I
 ```
 
 ## Key Features
 
-- **Intent Classification**: Structured LLM output with Pydantic validation, routing into faq, technical, billing, or escalation paths
+- **Intent Classification**: Structured LLM output with Pydantic `Literal` validation, routing into 7 categories — greeting, faq, technical, billing, escalation, off-topic, and closing
 - **RAG-Grounded Responses**: Answers grounded in a 13-doc knowledge base (70 vectors), chunked by markdown headings for semantic coherence
-- **Human-in-the-Loop**: Billing actions (refunds, plan changes) pause the graph via `interrupt()` for human approval, rejection, or edit
+- **Human-in-the-Loop**: Billing actions (refunds, plan changes) pause the graph via `interrupt()` for human approval, rejection, or edit. Reviewers see the full analysis and can modify the customer-facing response before it's sent
 - **Confidence-Based Escalation**: Low retrieval confidence automatically routes to human agent instead of risking a hallucinated response
-- **Dual Interface**: Customer chat panel with auto-polling for updates + human reviewer dashboard with clickable thread history
+- **Escalation Summaries**: LLM-generated conversation summaries for human agents, with escalation reason tracking (low confidence, customer frustration, direct request)
+- **Dual Interface**: Customer chat panel with auto-polling for updates + human reviewer dashboard with clickable thread history and escalation details
 
 ## Tech Stack
 
@@ -51,6 +54,7 @@ flowchart TD
 | `POST` | `/review` | Reviewer approves/rejects/edits a pending billing action |
 | `GET` | `/threads` | List all conversation threads with status (active, pending_review) |
 | `GET` | `/thread/{thread_id}/messages` | Full conversation history for a thread |
+| `GET` | `/thread/{thread_id}/state` | Graph state including intent, confidence, escalation reason and summary |
 | `GET` | `/` | Health check |
 
 ## Project Structure
@@ -59,11 +63,14 @@ flowchart TD
 customer-support-agent/
 ├── backend/
 │   ├── nodes/
-│   │   ├── classifier.py    # Intent classification (structured output)
+│   │   ├── classifier.py    # Intent classification (structured output, 7 categories)
 │   │   ├── rag.py           # Knowledge base retrieval + confidence scoring
 │   │   ├── response.py      # RAG-grounded response generation
 │   │   ├── billing.py       # Billing actions + HITL interrupt
-│   │   └── escalation.py    # Escalation summary + handoff
+│   │   ├── escalation.py    # Escalation summary + handoff
+│   │   ├── greeting.py      # Greeting handler
+│   │   ├── off_topic.py     # Off-topic deflection
+│   │   └── closing.py       # Conversation closing
 │   ├── app.py               # FastAPI endpoints
 │   ├── graph.py             # LangGraph graph definition + conditional routing
 │   ├── state.py             # SupportState schema
