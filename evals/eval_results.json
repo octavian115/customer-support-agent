@@ -370,7 +370,7 @@
       "expected_route": "faq",
       "expected_hitl": false,
       "actual_intent": "faq",
-      "actual_confidence": 0.574104071,
+      "actual_confidence": 0.574193597,
       "actual_escalation_reason": "Low retrieval confidence (0.57)",
       "actual_trajectory": [
         "classifier_node",
@@ -1212,7 +1212,7 @@
       "expected_route": "billing",
       "expected_hitl": true,
       "actual_intent": "billing",
-      "actual_confidence": 0.500559,
+      "actual_confidence": 0.50096041,
       "actual_escalation_reason": null,
       "actual_trajectory": [
         "classifier_node",
@@ -1319,7 +1319,7 @@
       "expected_route": "billing",
       "expected_hitl": true,
       "actual_intent": "billing",
-      "actual_confidence": 0.406027496,
+      "actual_confidence": 0.405979723,
       "actual_escalation_reason": null,
       "actual_trajectory": [
         "classifier_node",
@@ -1378,7 +1378,7 @@
       "expected_route": "technical",
       "expected_hitl": false,
       "actual_intent": "technical",
-      "actual_confidence": 0.263997495,
+      "actual_confidence": 0.263660699,
       "actual_escalation_reason": "Low retrieval confidence (0.26)",
       "actual_trajectory": [
         "classifier_node",
@@ -1442,7 +1442,7 @@
       "expected_route": "faq",
       "expected_hitl": false,
       "actual_intent": "faq",
-      "actual_confidence": 0.54208,
+      "actual_confidence": 0.542078078,
       "actual_escalation_reason": "Low retrieval confidence (0.54)",
       "actual_trajectory": [
         "classifier_node",
@@ -1557,7 +1557,7 @@
       "expected_route": "faq",
       "expected_hitl": false,
       "actual_intent": "faq",
-      "actual_confidence": 0.542259753,
+      "actual_confidence": 0.542216182,
       "actual_escalation_reason": "Low retrieval confidence (0.54)",
       "actual_trajectory": [
         "classifier_node",
@@ -1817,7 +1817,7 @@
       "expected_route": "billing",
       "expected_hitl": true,
       "actual_intent": "billing",
-      "actual_confidence": 0.434521317,
+      "actual_confidence": 0.434576303,
       "actual_escalation_reason": null,
       "actual_trajectory": [
         "classifier_node",

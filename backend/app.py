@@ -20,6 +20,9 @@ from backend.graph import support_agent
 
 from fastapi.middleware.cors import CORSMiddleware
 
+import logging
+logging.basicConfig(level=logging.WARNING)
+
 
 app = FastAPI(title="Customer Support Agent API")
 
